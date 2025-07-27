@@ -1,3 +1,0 @@
-vlc
-ntfs-3g
-nextcloud
