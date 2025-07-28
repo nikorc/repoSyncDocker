@@ -3,6 +3,8 @@ Dockerfile
 # RHEL UBI 9
 FROM redhat/ubi9:latest
 
+
+
 # Add Repos
 RUN dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm && \
         dnf install -y --nogpgcheck https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-$(rpm -E %rhel).noarch.rpm https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-$(rpm -E %rhel).noarch.rpm && \
@@ -10,12 +12,15 @@ RUN dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.n
         dnf makecache && \
         dnf install -y createrepo
 
-VOLUME ["/repoData"]
-VOLUME ["/repoConfigs"]
-VOLUME ["/app"]
+## ADD user group ID
 
-Copy ./app /app
+#VOLUME ["/repoData"]
+#VOLUME ["/repoConfigs"]
 
-WORKDIR /app
+COPY ./app/generateExtrasRepo.sh /usr/local/bin/generateExtrasRepo.sh
+COPY ./app/rhRepoDownload.sh /usr/local/bin/rhRepoDownload.sh
+RUN chmod +x /usr/local/bin/generateExtrasRepo.sh /usr/local/bin/rhRepoDownload.sh
 
-CMD ["/bin/bash"]
+#CMD ["/bin/bash"]
+#CMD ["/app/rhRepoDownload.sh"]
+CMD ["/bin/sh", "-c", "/usr/local/bin/generateExtrasRepo.sh && /usr/local/bin/rhRepoDownload.sh"]

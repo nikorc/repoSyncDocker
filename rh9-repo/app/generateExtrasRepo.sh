@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 ######
 ## DESC: Creates custom repo dirs from approved/wanted pgk list. DL from epel, rpmfusion-free, & rpmfussion-nonfree
 ## AUTHOR: Nic Colombey

@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 ######
 ## DESC: Performs Reposync of RHEL BaseOS, AppStream, & CodeReady Official Repos; lastes pkgs only.
 ## AUTHOR: Nic Colombey
