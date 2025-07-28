@@ -27,7 +27,7 @@ rpmfusion-nonfree
 
 # Establish Config PATHS and FILES
 CONFILE () {
-if [ -d "/repoConfigs/$rhVersion" ]; then
+if [ ! -d "/repoConfigs/$rhVersion" ]; then
   mkdir -p /repoConfigs/$rhVersion
 fi
 
