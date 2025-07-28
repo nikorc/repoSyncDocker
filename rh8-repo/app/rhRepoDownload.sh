@@ -20,9 +20,9 @@ rhVersion=RHEL$(rpm -E %rhel).latest
 
 # RHEL9 Repos List
 repoSrcList=(
-	rhel-9-for-x86_64-baseos-rpms
-	rhel-9-for-x86_64-appstream-rpms
-	codeready-builder-for-rhel-9-x86_64-rpms
+	rhel-8-for-x86_64-baseos-rpms
+	rhel-8-for-x86_64-appstream-rpms
+	codeready-builder-for-rhel-8-x86_64-rpms
 )
 # Clean up old Data
 CLEANDIR () {

@@ -1,7 +1,7 @@
 Dockerfile
 
 # RHEL UBI 9
-FROM redhat/ubi9:latest
+FROM redhat/ubi8:latest
 
 
 
