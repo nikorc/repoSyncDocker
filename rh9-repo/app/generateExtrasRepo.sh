@@ -18,8 +18,7 @@ NC=$'\e[0m' # Resets all formatting
 
 # Set Variables
 rhVersion=RHEL9.latest
-pkgList=/repoConfigs/$rhVersion/listOfExtras.txt
-pkgName=$(cat /repoConfigs/$rhVersion/approvedExtras.txt)
+approveList=/repoConfigs/$rhVersion/approvedExtras.txt
 repoSrcList=(
 epel
 rpmfusion-free
@@ -28,13 +27,14 @@ rpmfusion-nonfree
 
 # Establish Config PATHS and FILES
 CONFILE () {
-if [ -! -d /repoConfigs/$rhVersion ]; then
+if [ -d "/repoConfigs/$rhVersion" ]; then
   mkdir -p /repoConfigs/$rhVersion
 fi
 
-if [ ! -f $pkgList ]; then
+if [ ! -f $approveList ]; then
   echo "${RED}CREATING EMPTY APPROVED PACKAGE LIST; POPULATE WITH PKGs WANTED FROM EPEL & RPMFUSSION ${NC}"
-  touch $pkgList
+  touch "$approveList"
+  exit 0
 fi
 }
 
@@ -56,8 +56,9 @@ CLEANDIR () {
 # Generate package List
 GENERATE () {
   echo "${GREEN}CREATING NEW FULL PACKAGE LIST TO DOWNLOAD ${NC}"
+  pkgName=$(cat /repoConfigs/$rhVersion/approvedExtras.txt)
   pkgList=/repoConfigs/$rhVersion/listOfExtras.$repoSrc
-  dnf install --assumeno $pkgName | grep $repoSrc | grep -v "Operation aborted." | cut -d" " -f2 > $pkgList
+  dnf install --assumeno $pkgName 2>/dev/null | grep $repoSrc | cut -d" " -f2 > $pkgList
 }
 
 # Download packages 
@@ -78,14 +79,13 @@ CREATEREPO () {
 ######
 # Run Functions
 CONFILE
-CLEANLIST
 
 for repoSrc in "${repoSrcList[@]}"; do
   echo "${BOLD} CLEAN UP and GENERATION OF PACKAGE LIST $repoSrc ${NC}"
   CLEANDIR
   GENERATE
   if [ -s $pkgList ]; then
-    echo "${BOLD}PERFORMING ACCTION for $repoSrc ${NC}"
+    echo "${BOLD}PERFORMING REPO TASKS for $repoSrc ${NC}"
     DOWNLOAD
     CREATEREPO
   else
