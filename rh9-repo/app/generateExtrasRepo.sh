@@ -22,7 +22,6 @@ approveList=/repoConfigs/$rhVersion/approvedExtras.txt
 repoSrcList=(
 epel
 rpmfusion-free
-rpmfusion-nonfree
 )
 
 # Establish Config PATHS and FILES
@@ -64,8 +63,7 @@ GENERATE () {
 # Download packages 
 DOWNLOAD () {
   echo "${BLUE}DOWNLOADING PACKAGE LIST FOR $repoSrc ${NC}"
-  downList=$(cat $pkgList)
-  dnf download $downList -q --destdir /repoData/$rhVersion/$repoSrc/packages
+  dnf download $(cat $approveList) -q --destdir /repoData/$rhVersion/$repoSrc/packages
 }
 
 # Create repo files
