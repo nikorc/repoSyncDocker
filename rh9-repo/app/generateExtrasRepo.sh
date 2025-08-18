@@ -80,6 +80,7 @@ CONFILE
 
 for repoSrc in "${repoSrcList[@]}"; do
   echo "${BOLD} CLEAN UP and GENERATION OF PACKAGE LIST $repoSrc ${NC}"
+  CLEANLIST
   CLEANDIR
   GENERATE
   if [ -s $pkgList ]; then

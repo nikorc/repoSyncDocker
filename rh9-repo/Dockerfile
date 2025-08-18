@@ -22,9 +22,8 @@ COPY ./app/rhRepoDownload.sh /usr/local/bin/rhRepoDownload.sh
 COPY ./app/mkISO.sh /usr/local/bin/mkISO.sh
 RUN chmod +x /usr/local/bin/generateExtrasRepo.sh /usr/local/bin/rhRepoDownload.sh /usr/local/bin/mkISO.sh
 
-CMD ["/bin/bash"]
-#CMD ["/bin/sh", "-c", "/usr/local/bin/generateExtrasRepo.sh && /usr/local/bin/rhRepoDownload.sh"]
-#CMD ["/bin/sh", "-c", "/usr/local/bin/mkISO.sh"]
+#CMD ["/bin/bash"]
+CMD ["/bin/sh", "-c", "/usr/local/bin/generateExtrasRepo.sh && /usr/local/bin/rhRepoDownload.sh"]
+#CMD ["/bin/sh", "-c", "/usr/local/bin/generateExtrasRepo.sh"]
+CMD ["/bin/sh", "-c", "/usr/local/bin/mkISO.sh"]
 
-
-##fixing approve list download with program pkgs
