@@ -1,6 +1,6 @@
 #!/bin/bash
 ######
-## DESC: Performs Reposync of RHEL BaseOS, AppStream, & CodeReady Official Repos; lastes pkgs only.
+## DESC: Performs Reposync of RHEL Teridivi rpms 
 ## AUTHOR: Nic Colombey
 ## DATE:  2025-07-27
 ## repoData = Location for Repos to be created
@@ -16,14 +16,14 @@ BOLD=$'\e[1m'
 NC=$'\e[0m' # Resets all formatting
 
 # Set Variables
-rhVersion=RHEL$(rpm -E %rhel).latest
+rhVersion=RHEL$(rpm -E %rhel).teridici
 
 # RHEL9 Repos List
 repoSrcList=(
-	rhel-8-for-x86_64-baseos-rpms
-	rhel-8-for-x86_64-appstream-rpms
-	codeready-builder-for-rhel-8-x86_64-rpms
+teradici-pcoip-agent
+teradici-pcoip-agent-noarch
 )
+
 # Clean up old Data
 CLEANDIR () {
   if [ -d /repoData/$rhVersion/$repoSrc ]; then
@@ -35,7 +35,7 @@ CLEANDIR () {
 # Perform Reposync
 DOWNLOAD () {
   echo "${BLUE}PERFORMING REPOSYNC FOR $repoSrc ${NC}"
-  dnf reposync -n --download-metadata --repo $repoSrc -q -p /repoData/$rhVersion/$repoSrc/
+  dnf reposync -n --download-metadata --repo $repoSrc -q -p /repoData/$rhVersion/
 }
 
 ######

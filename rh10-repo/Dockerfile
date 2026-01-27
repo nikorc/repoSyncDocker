@@ -1,5 +1,5 @@
 # RHEL UBI 9
-FROM redhat/ubi9:latest
+FROM redhat/ubi10:latest
 
 # Add Repos and Install Packages
 RUN dnf config-manager --enable codeready-builder-for-rhel-$(rpm -E %rhel)-x86_64-rpms && \

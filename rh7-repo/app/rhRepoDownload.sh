@@ -20,9 +20,11 @@ rhVersion=RHEL$(rpm -E %rhel).latest
 
 # RHEL9 Repos List
 repoSrcList=(
-	rhel-8-for-x86_64-baseos-rpms
-	rhel-8-for-x86_64-appstream-rpms
-	codeready-builder-for-rhel-8-x86_64-rpms
+rhel-7-server-rpms                                                                                                                   
+rhel-7-server-extras-rpms
+rhel-7-server-optional-rpms
+rhel-7-server-rh-common-rpms
+rhel-7-server-supplementary-rpms
 )
 # Clean up old Data
 CLEANDIR () {
@@ -35,10 +37,9 @@ CLEANDIR () {
 # Perform Reposync
 DOWNLOAD () {
   echo "${BLUE}PERFORMING REPOSYNC FOR $repoSrc ${NC}"
-  dnf reposync -n --download-metadata --repo $repoSrc -q -p /repoData/$rhVersion/$repoSrc/
+  reposync -n --repo $repoSrc --downloadcomps -q -p /repoData/$rhVersion/
 }
 
-######
 # Run Functions
 for repoSrc in "${repoSrcList[@]}"; do
 	CLEANDIR

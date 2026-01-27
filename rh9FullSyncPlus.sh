@@ -16,13 +16,15 @@ BOLD=$'\e[1m'
 NC=$'\e[0m' # Resets all formatting
 
 # Set Variables
-rhVersion=RHEL$(rpm -E %rhel).latest
+#hVersion=RHEL$(rpm -E %rhel).latest
+rhVersion=repoFull
 
 # RHEL9 Repos List
 repoSrcList=(
-	rhel-8-for-x86_64-baseos-rpms
-	rhel-8-for-x86_64-appstream-rpms
-	codeready-builder-for-rhel-8-x86_64-rpms
+epel
+rhel-9-for-x86_64-baseos-rpms
+rhel-9-for-x86_64-appstream-rpms
+codeready-builder-for-rhel-9-x86_64-rpms
 )
 # Clean up old Data
 CLEANDIR () {
@@ -35,7 +37,7 @@ CLEANDIR () {
 # Perform Reposync
 DOWNLOAD () {
   echo "${BLUE}PERFORMING REPOSYNC FOR $repoSrc ${NC}"
-  dnf reposync -n --download-metadata --repo $repoSrc -q -p /repoData/$rhVersion/$repoSrc/
+  dnf reposync --download-metadata -m --repo $repoSrc -q -p /repoData/$rhVersion/
 }
 
 ######
