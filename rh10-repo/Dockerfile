@@ -4,7 +4,7 @@ FROM redhat/ubi10:latest
 # Add Repos and Install Packages
 RUN dnf config-manager --enable codeready-builder-for-rhel-$(rpm -E %rhel)-x86_64-rpms && \
     dnf makecache && \
-    dnf install -y createrepo mkisofs && \
+    dnf install -y createrepo xorriso && \
     dnf clean all
 
 VOLUME ["/repoData"]

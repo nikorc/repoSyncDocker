@@ -18,11 +18,11 @@ NC=$'\e[0m' # Resets all formatting
 # Set Variables
 rhVersion=RHEL$(rpm -E %rhel).latest
 
-# RHEL9 Repos List
+# RHEL10 Repos List
 repoSrcList=(
-	rhel-9-for-x86_64-baseos-rpms
-	rhel-9-for-x86_64-appstream-rpms
-	codeready-builder-for-rhel-9-x86_64-rpms
+	rhel-10-for-x86_64-baseos-rpms
+	rhel-10-for-x86_64-appstream-rpms
+	codeready-builder-for-rhel-10-x86_64-rpms
 )
 # Clean up old Data
 CLEANDIR () {
