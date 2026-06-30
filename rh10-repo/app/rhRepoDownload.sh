@@ -23,6 +23,7 @@ repoSrcList=(
 	rhel-10-for-x86_64-baseos-rpms
 	rhel-10-for-x86_64-appstream-rpms
 	codeready-builder-for-rhel-10-x86_64-rpms
+        epel
 )
 # Clean up old Data
 CLEANDIR () {
@@ -34,6 +35,7 @@ CLEANDIR () {
 
 # Perform Reposync
 DOWNLOAD () {
+  dnf repolist < /repoData/$rhVersion.repolist
   echo "${BLUE}PERFORMING REPOSYNC FOR $repoSrc ${NC}"
   dnf reposync -n --repo $repoSrc --downloadcomps -q -p /repoData/$rhVersion/
 }

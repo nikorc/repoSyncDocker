@@ -35,7 +35,7 @@ CLEANDIR () {
 # Perform Reposync
 DOWNLOAD () {
   echo "${BLUE}PERFORMING REPOSYNC FOR $repoSrc ${NC}"
-  dnf reposync -n --download-metadata --repo $repoSrc -q -p /repoData/$rhVersion/$repoSrc/
+  dnf reposync -n --downloadcomps --download-metadata --repo $repoSrc -q -p /repoData/$rhVersion/$repoSrc/
 }
 
 ######

@@ -3,6 +3,7 @@ FROM redhat/ubi10:latest
 
 # Add Repos and Install Packages
 RUN dnf config-manager --enable codeready-builder-for-rhel-$(rpm -E %rhel)-x86_64-rpms && \
+    dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm && \
     dnf makecache && \
     dnf install -y createrepo xorriso && \
     dnf clean all
