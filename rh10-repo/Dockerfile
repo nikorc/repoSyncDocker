@@ -1,33 +1,25 @@
 FROM registry.access.redhat.com/ubi10/ubi:latest
 
-ENV LANG=C.UTF-8
+LABEL description="RHEL 10 repository reposync and GPG key downloader"
 
 RUN dnf -y install \
-        dnf-plugins-core \
+        bash \
         ca-certificates \
         curl \
+        dnf-plugins-core \
         gzip \
         tar \
-        xz \
         findutils \
-        xorriso \
-    && dnf clean all
-
-# EPEL 10
-RUN dnf -y install \
-    https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm \
-    && dnf clean all
-
-# RPM Fusion for EL10
-RUN dnf -y install \
-    https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-10.noarch.rpm \
-    https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-10.noarch.rpm \
-    && dnf clean all
+        coreutils \
+        subscription-manager \
+    && dnf clean all \
+    && rm -rf /var/cache/dnf
 
 COPY reposync.sh /usr/local/bin/reposync.sh
-RUN chmod 0755 /usr/local/bin/reposync.sh
 
-WORKDIR /repos
+RUN chmod 0750 /usr/local/bin/reposync.sh \
+    && mkdir -p /repos/rhel10/gpg-keys
+
+ENV reposync_ROOT=/repos/rhel10
 
 ENTRYPOINT ["/usr/local/bin/reposync.sh"]
-
