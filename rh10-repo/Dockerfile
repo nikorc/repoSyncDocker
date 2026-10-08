@@ -1,18 +1,33 @@
-# RHEL UBI 9
-FROM redhat/ubi10:latest
+FROM registry.access.redhat.com/ubi10/ubi:latest
 
-# Add Repos and Install Packages
-RUN dnf config-manager --enable codeready-builder-for-rhel-$(rpm -E %rhel)-x86_64-rpms && \
-    dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm && \
-#    /usr/sbin/subscription-manager release --set=10.2 && \
-#    dnf makecache && \
-#    dnf install -y createrepo xorriso && \
-    dnf clean all
+ENV LANG=C.UTF-8
 
-VOLUME ["/repoData"]
+RUN dnf -y install \
+        dnf-plugins-core \
+        ca-certificates \
+        curl \
+        gzip \
+        tar \
+        xz \
+        findutils \
+        xorriso \
+    && dnf clean all
 
-COPY ./app/rhRepoDownload.sh /usr/local/bin/rhRepoDownload.sh
-RUN chmod a+x /usr/local/bin/rhRepoDownload.sh
+# EPEL 10
+RUN dnf -y install \
+    https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm \
+    && dnf clean all
 
-CMD ["/bin/sh", "-c", "/usr/local/bin/rhRepoDownload.sh"]
+# RPM Fusion for EL10
+RUN dnf -y install \
+    https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-10.noarch.rpm \
+    https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-10.noarch.rpm \
+    && dnf clean all
+
+COPY reposync.sh /usr/local/bin/reposync.sh
+RUN chmod 0755 /usr/local/bin/reposync.sh
+
+WORKDIR /repos
+
+ENTRYPOINT ["/usr/local/bin/reposync.sh"]
 

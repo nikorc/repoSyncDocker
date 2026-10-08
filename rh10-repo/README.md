@@ -1,7 +1,10 @@
 # CONTAINER CONFIG
 
-Default locations
-repoData = /repoData/repos
-repoConfigs = /repoData/repoConfigs
+docker build -t rh10-reposync .
 
-podman run -it -c /path/to/repos:/repoData:Z -v /path/to/config_files:/repoconfigs:Z localhost/rh9repo-test
+sudo mkdir -p /srv/repos/rhel10
+
+docker run --rm -it \
+  --privileged \
+  -v /srv/repos/rhel10:/repos:Z \
+  rh10-reposync
