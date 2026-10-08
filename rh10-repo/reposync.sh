@@ -37,8 +37,8 @@ dnf makecache --refresh || die "Repository metadata refresh failed."
 # Explicitly synchronize enabled repository IDs.
 # Review this list with: dnf repolist --enabled
 REPOS=(
-    "ubi-10-for-x86_64-baseos-rpms"
-    "ubi-10-for-x86_64-appstream-rpms"
+    "rhel-10-for-${ARCH}-baseos-rpms" \
+    "rhel-10-for-${ARCH}-appstream-rpms" \
     "codeready-builder-for-rhel-10-${ARCH}-rpms"
     "epel"
     "rpmfusion-free-updates"
@@ -48,7 +48,7 @@ REPOS=(
 # Use actual repository IDs present on this system.
 for REPO in "${REPOS[@]}"; do
     if ! dnf repolist --enabled -q | grep -Fq "$REPO"; then
-        warn "Skipping unavailable or disabled repository: $REPO"
+        subscription-manager repos --enable="$REPO"
         continue
     fi
 
