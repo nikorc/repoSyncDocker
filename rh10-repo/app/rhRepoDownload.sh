@@ -18,11 +18,17 @@ NC=$'\e[0m' # Resets all formatting
 # Set Variables
 rhVersion=RHEL$(rpm -E %rhel).latest
 
-# RHEL9 Repos List
+/usr/sbin/subscription-manager release --set=10.2
+dnf makecache 
+#dnf install -y createrepo xorriso 
+
+
+# RHEL10 Repos List
 repoSrcList=(
-	rhel-8-for-x86_64-baseos-rpms
-	rhel-8-for-x86_64-appstream-rpms
-	codeready-builder-for-rhel-8-x86_64-rpms
+	rhel-10-for-x86_64-baseos-rpms
+	rhel-10-for-x86_64-appstream-rpms
+	codeready-builder-for-rhel-10-x86_64-rpms
+       # epel
 )
 # Clean up old Data
 CLEANDIR () {
@@ -34,11 +40,11 @@ CLEANDIR () {
 
 # Perform Reposync
 DOWNLOAD () {
+  dnf repolist < /repoData/$rhVersion.repolist
   echo "${BLUE}PERFORMING REPOSYNC FOR $repoSrc ${NC}"
-  dnf reposync -n --downloadcomps --download-metadata --repo $repoSrc -q -p /repoData/$rhVersion/$repoSrc/
+  dnf reposync -n --repo $repoSrc --downloadcomps --download-metadata -q -p /repoData/$rhVersion/
 }
 
-######
 # Run Functions
 for repoSrc in "${repoSrcList[@]}"; do
 	CLEANDIR

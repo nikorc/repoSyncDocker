@@ -1,26 +1,33 @@
-Dockerfile
+FROM registry.access.redhat.com/ubi9/ubi:latest
 
-# RHEL UBI 9
-FROM redhat/ubi9:latest
+ENV container=docker
+ENV LANG=C.UTF-8
 
+RUN dnf -y install \
+        dnf-plugins-core \
+        subscription-manager \
+        ca-certificates \
+        tar \
+        gzip \
+        xz \
+        findutils \
+        xorriso \
+    && dnf clean all
 
+# Install EPEL repository configuration
+RUN dnf -y install \
+        https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm \
+    && dnf clean all
 
-# Add Repos
-RUN dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-$(rpm -E %rhel).noarch.rpm && \
-        dnf install -y --nogpgcheck https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-$(rpm -E %rhel).noarch.rpm https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-$(rpm -E %rhel).noarch.rpm && \
-        dnf config-manager --enable codeready-builder-for-rhel-$(rpm -E %rhel)-x86_64-rpms && \
-        dnf makecache && \
-        dnf install -y createrepo
+# Enable RPM Fusion Free and Nonfree
+RUN dnf -y install \
+        https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-9.noarch.rpm \
+        https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-9.noarch.rpm \
+    && dnf clean all
 
-## ADD user group ID
+COPY reposync.sh /usr/local/bin/reposync.sh
+RUN chmod 0755 /usr/local/bin/reposync.sh
 
-#VOLUME ["/repoData"]
-#VOLUME ["/repoConfigs"]
+WORKDIR /repos
 
-COPY ./app/generateExtrasRepo.sh /usr/local/bin/generateExtrasRepo.sh
-COPY ./app/rhRepoDownload.sh /usr/local/bin/rhRepoDownload.sh
-RUN chmod +x /usr/local/bin/generateExtrasRepo.sh /usr/local/bin/rhRepoDownload.sh
-
-#CMD ["/bin/bash"]
-#CMD ["/app/rhRepoDownload.sh"]
-CMD ["/bin/sh", "-c", "/usr/local/bin/generateExtrasRepo.sh && /usr/local/bin/rhRepoDownload.sh"]
+ENTRYPOINT ["/usr/local/bin/reposync.sh"]
