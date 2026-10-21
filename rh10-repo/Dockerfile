@@ -10,7 +10,6 @@ RUN dnf -y install \
         gzip \
         tar \
         findutils \
-        coreutils \
         subscription-manager \
     && dnf clean all \
     && rm -rf /var/cache/dnf
